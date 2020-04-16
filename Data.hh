@@ -10,9 +10,9 @@ class Data {
 
   unsigned int size() const { return m_data.size(); }
   double measurement(int i) const { return m_data[i]; }
-  double binCenter(int i) const { return 0; }
-  double binLow(int i) const { return 0; }
-  double binHigh(int i) const { return 0; }
+  double binCenter(int i) const { return (m_bins[i+1]+m_bins[i])/2.; }
+  double binLow(int i) const { return m_bins[i]; }
+  double binHigh(int i) const { return m_bins[i+1]; }
   double error(int i) const { return m_error[i]; }
   int CheckCompatibility(Data* in, int N);
 
