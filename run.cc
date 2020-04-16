@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <cmath>
 #include <string>
 
 #include "Data.hh"
@@ -59,6 +60,13 @@ void runTests() {
     std::cout << (test() ? " ok" : " FAILED!") << std::endl;
 }
 
+
+double f(double x , double* pars){
+  //f(x) = α + β x + γ*exp(−δ x)
+  double result = pars[0] + pars[1]*x + pars[2]*std::exp(-pars[3]*x);
+  return result;
+}
+
 int main() {
   using namespace std;
 
@@ -105,5 +113,18 @@ int main() {
   }
 
   cout << "combined dataset " << " bin27: " << combined->measurement(27) << " +- " << combined->error(27)<<endl;
+
+  double pars[4] = {0.005,-0.00001,0.08,0.015};
+
+  for(int i = 0; i < datasets.size(); i++){
+    int ndof = dat[i]->size() - sizeof(pars)/sizeof(*pars);
+    double chi2 = dat[i]->Chi2(f,pars);
+    cout << "dataset " << datasets[i] << " Chi2/Ndof: " << chi2 << "/" << ndof <<" = "<< chi2/ndof << endl;
+  }
+
+  int ndof = combined->size() - sizeof(pars)/sizeof(*pars);
+  double chi2 = combined->Chi2(f,pars);
+  cout << "combined dataset " << " Chi2/Ndof: " << chi2 << "/" << ndof <<" = "<< chi2/ndof << endl;
+
   return 0;
 }
