@@ -70,3 +70,16 @@ void Data::Combine(Data* in){
     m_error[i] = sigma;
   }
 };
+
+
+double Data::Chi2(double f (double,double*) , double* pars){
+  double sum=0;
+  for(int i = 0; i < this->size(); i++){
+    double numerator = this->measurement(i) - f(this->binCenter(i),pars);
+    numerator *= numerator;
+    double denominator = this->error(i)*this->error(i);
+    sum += numerator/denominator;
+  }
+  return sum;
+};
+

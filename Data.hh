@@ -17,6 +17,7 @@ class Data {
   int CheckCompatibility(Data* in, int N);
 
   void Combine(Data* in);
+  double Chi2(double f (double,double*) , double* pars);
   
 private:
   Data() {}  // disallow empty data
