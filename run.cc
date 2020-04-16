@@ -66,12 +66,44 @@ int main() {
   runTests();
   cout << "******************************************************" << endl;
   // create an object which holds data of experiment A
-  Data datA("exp_A");
 
+  std::vector<std::string> datasets = {"A","B","C","D"};
+  
+  std::vector<Data*> dat = {};
+  // dat.reserve(datasets.size());
+
+  for(int i = 0 ; i<datasets.size(); i++){
+    Data *this_dat = new Data("exp_"+datasets[i]);
+    dat.push_back(this_dat);
+  }
+  
   // here is the data from experiment A
-  cout << "bin 0: from " << datA.binLow(0) << " to " << datA.binHigh(1) << endl;
-  cout << "measurement of experiment A in bin 0: " << datA.measurement(0)
+  cout << "bin 0: from " << dat[0]->binLow(0) << " to " << dat[0]->binHigh(1) << endl;
+  cout << "measurement of experiment A in bin 0: " << dat[0]->measurement(0)
        << endl;
 
+
+  for(int i = 0; i < datasets.size(); i++){
+    for(int j = 0; j < datasets.size(); j++){
+      if(i==j || i>j)continue;
+      cout << "comparing datasets dat"<<datasets[i] <<" and dat"<< datasets[j]<< endl;
+      cout << "number of not compatible bins (within 2sigma): " << dat[i]->CheckCompatibility(dat[j],2) << endl;
+      cout << "number of not compatible bins (within 3sigma): " << dat[i]->CheckCompatibility(dat[j],3) << endl;
+    }
+  }
+
+  Data* combined = new Data("exp_A");
+  cout << "combining A and B" << endl;
+  combined->Combine(dat[1]);
+  cout << "combining AB and C" << endl;
+  combined->Combine(dat[1]);
+  cout << "combining ABC and D" << endl;
+  combined->Combine(dat[1]);
+
+  for(int i = 0; i < datasets.size(); i++){
+    cout << "dataset " << datasets[i] << " bin27: " << dat[i]->measurement(27) << " +- " << dat[i]->error(27)<<endl;
+  }
+
+  cout << "combined dataset " << " bin27: " << combined->measurement(27) << " +- " << combined->error(27)<<endl;
   return 0;
 }
