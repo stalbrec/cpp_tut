@@ -13,12 +13,16 @@ class Data {
   double binCenter(int i) const { return 0; }
   double binLow(int i) const { return 0; }
   double binHigh(int i) const { return 0; }
-  double error(int i) const { return 0; }
+  double error(int i) const { return m_error[i]; }
+  int CheckCompatibility(Data* in, int N);
 
- private:
+  void Combine(Data* in);
+  
+private:
   Data() {}  // disallow empty data
   void assertSizes();
   std::vector<double> m_data;
+  std::vector<double> m_error;
   std::vector<double> m_bins;
 };
 
